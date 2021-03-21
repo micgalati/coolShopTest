@@ -7,65 +7,65 @@
 #define ROW 3
 #define COL 4
 
-#define lung_parola 10 //caratteri che compongono una parola
+#define wordLenght 10 //caratteri che compongono una parola
 #define BUFF 1024  //lunghezza della riga del fila
 
 //PROTOTIPI
-char **definizione_Row(void);
-void ricerca(char **row, char *buffer, FILE *fp, const char *argv[]);
-char *eliminaSeparatori(char *buffer);
-int lettura_colonna_ricerca(const char *argv[]);
-char *lettura_parola_ricerca(const char *argv[]);
+char **rowDefinition(void);
+void search(char **row, char *buffer, FILE *fp, const char *argv[]);
+char *deleteSeparator(char *buffer);
+int readColumn(const char *argv[]);
+char *readWord(const char *argv[]);
 int matching(int num_col, char *str, char **row);
-void stampa(char **row);
+void print(char **row);
 
 int main(int argc, const char * argv[]) {
     
     /* APERTURA FILE */
     FILE *fp = fopen(argv[1], "r");
     
-    char **row =  definizione_Row();
+    char **row =  rowDefinition();
     
     char *buffer = malloc(BUFF * sizeof(char));
     
-    ricerca(row, buffer, fp, argv);
+    search(row, buffer, fp, argv);
    
     fclose(fp);
     
     return 0;
 }
 
-char **definizione_Row(){
+char **rowDefinition(){
     char **row;
     row = malloc(COL * sizeof(char *));
     for(int i = 0; i<COL; i++)
-        row[i] = malloc(lung_parola * sizeof(char));
+        row[i] = malloc(wordLenght * sizeof(char));
     
     return row;
 }
 
-void ricerca(char **row, char *buffer, FILE *fp, const char *argv[]){
+void search(char **row, char *buffer, FILE *fp, const char *argv[]){
     int j=0, match=0;
     while( fscanf(fp, "%s", buffer) != EOF){
         //Eliminazione separatori: virgole e punti e virgole
-        buffer = eliminaSeparatori(buffer);
+        buffer = deleteSeparator(buffer);
 
         sscanf(buffer, "%s %s %s %s", row[j], row[j+1], row[j+2], row[j+3]);
 
-        int num_col = lettura_colonna_ricerca(argv);
-        char *str = lettura_parola_ricerca(argv);
+        int numCol = readColumn(argv);
+        char *str = readWord(argv);
         
-        match = matching(num_col, str, row);
+        match = matching(numCol, str, row);
         
         if(match==1)
-            stampa(row);
+            print(row);
     }
     
     if(match==0)
         printf("Nessuna corrispondenza trovata\n");
 }
 
-char *eliminaSeparatori(char *buffer){
+char *deleteSeparator(char *buffer){
     for(int i=0; i< BUFF; i++){
         if(buffer[i] == ',')
             buffer[i] = ' ';
@@ -76,13 +76,13 @@ char *eliminaSeparatori(char *buffer){
     return buffer;
 }
 
-int lettura_colonna_ricerca(const char *argv[]){
-    int num_col = atoi(argv[2]);
-    return num_col;
+int readColumn(const char *argv[]){
+    int numCol = atoi(argv[2]);
+    return numCol;
 }
 
-char *lettura_parola_ricerca(const char *argv[]){
-    char *str = malloc(lung_parola * sizeof(char));
+char *readWord(const char *argv[]){
+    char *str = malloc(wordLenght * sizeof(char));
     strcpy(str, argv[3]);
     return str;
 }
@@ -96,7 +96,7 @@ int matching(int num_col, char *str, char **row){
     return match;
 }
 
-void stampa(char **row){
+void print(char **row){
     int j=0;
     printf("%s,%s,%s,%s;\n", row[j], row[j+1], row[j+2], row[j+3]);
 }
