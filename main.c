@@ -26,7 +26,7 @@ int main(int argc, const char * argv[]) {
     
     char **row =  rowDefinition();
     
-    char *buffer = malloc(BUFF * sizeof(char));
+    char *buffer = malloc(BUFF * sizeof(char));  
     
     search(row, buffer, fp, argv);
    
@@ -35,6 +35,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
+//DEFINIZIONE DELLA STRUTTURA DATI PER LA LETTURA DEL FILE
 char **rowDefinition(){
     char **row;
     row = malloc(COL * sizeof(char *));
@@ -44,6 +45,7 @@ char **rowDefinition(){
     return row;
 }
 
+//RICERCA NEL FILE RISPETTANDO I PARAMETRI INSERITI
 void search(char **row, char *buffer, FILE *fp, const char *argv[]){
     int j=0, match=0;
     while( fscanf(fp, "%s", buffer) != EOF){
@@ -76,17 +78,20 @@ char *deleteSeparator(char *buffer){
     return buffer;
 }
 
+//LETTURA DEL PARAMETRO DI RICERCA PER COLONNA
 int readColumn(const char *argv[]){
     int numCol = atoi(argv[2]);
     return numCol;
 }
 
+//LETTURA DEL PARAMETRO DI RICERCA PER PAROLA
 char *readWord(const char *argv[]){
     char *str = malloc(wordLenght * sizeof(char));
     strcpy(str, argv[3]);
     return str;
 }
 
+//CONDIZIONE DI MATCH
 int matching(int num_col, char *str, char **row){
     int j=0, match=0;
     if(strcmp(row[j+num_col], str) == 0){
@@ -96,6 +101,7 @@ int matching(int num_col, char *str, char **row){
     return match;
 }
 
+//OUTPUT
 void print(char **row){
     int j=0;
     printf("%s,%s,%s,%s;\n", row[j], row[j+1], row[j+2], row[j+3]);
